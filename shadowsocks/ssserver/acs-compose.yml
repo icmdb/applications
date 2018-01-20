@@ -1,0 +1,32 @@
+version: "2"
+services:
+  ssserver:
+    image: teachmyself/ssserver:latest
+    cpu_share: 10 # 0.5Core
+    mem_limit: 200000000 # 20M
+    environment:
+      - reschedule:on-node-failure
+      - affinity:service!=~ssserver
+      - CLUSTER=cluster01
+      - APP=ssserver
+      - SERVER_ADDR=0.0.0.0
+      - SERVER_PORT=8888
+      - PASSWORD=Passw0rd
+      - METHOD=aes-256-cfb
+      - TIMEOUT=300
+      - WORKERS=6
+    labels:
+      aliyun.probe.url: tcp://container:8888
+      aliyun.probe.timeout_seconds: 3
+      aliyun.probe.initial_delay_seconds: 3
+      aliyun.rolling_update: 'true'
+      aliyun.global: true
+      aliyun.lb.port_8888: tcp://lb01-hk:8888
+      aliyun.log_store_ssserver: stdout
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8888:8888/tcp
+    expose:
+      - 8888:8888/tcp
+    restart: always
