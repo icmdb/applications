@@ -33,7 +33,7 @@ docker images
 
 ```
 docker run -d  \
-    -v /etc/localtime:/etc/localtime \
+    -v /etc/localtime:/etc/localtime:ro \
     -e SERVER_PORT=8888 \
     -e PASSWORD=123456 \
     -e METHOD=aes-256-cfb \
