@@ -1,7 +1,16 @@
 # sslocal
 
+[TOC]
 
-## Example
+## Pull image
+```bash
+docker pull teachmyself/sslocal
+docker images | grep sslocal
+```
+
+## Start container named sslocal
+
+> This step depedends on a ssserver.
 
 ```bash
 docker run -d  \
@@ -17,19 +26,28 @@ docker run -d  \
     teachmyself/sslocal
 ```
 
-```
+## Check sslocal container
+```bash
 docker ps
+```
 
-docker logs sslocal
+## Check logs
+```bash
+docker exec sslocal tail -f /var/log/sslocal.log
+```
 
+## Stop & Remove sslocal
+```bash
 docker stop sslocal
 
 docker rm sslocal
-
-export http_proxy=127.0.0.1:8118;
-export https_proxy=127.0.0.1:8118;
-curl www.google.com
 ```
 
+## Proxy Usage
+```bash
+export http_proxy=127.0.0.1:8118;
+export https_proxy=127.0.0.1:8118;
 
+curl www.google.com
+```
 

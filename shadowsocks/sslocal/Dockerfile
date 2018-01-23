@@ -15,21 +15,21 @@ ENV SSL_LOG "/var/log/sslocal.log"
 ADD . /sslocal
 
 RUN set -xue; \
-		sed -i 's#^#\##g' /etc/apk/repositories; \
+        sed -i 's#^#\##g' /etc/apk/repositories; \
         sed -i '1ihttp://mirrors.ustc.edu.cn/alpine/v3.6/main/' /etc/apk/repositories; \
         sed -i '1ihttp://mirrors.ustc.edu.cn/alpine/v3.6/community/' /etc/apk/repositories; \
         sed -i '1ihttps://mirrors.tuna.tsinghua.edu.cn/alpine/v3.6/main/' /etc/apk/repositories; \
         sed -i '1ihttps://mirrors.tuna.tsinghua.edu.cn/alpine/v3.6/community/' /etc/apk/repositories; \
-		apk update && apk add \
-	 	    curl \
-	 	    py-pip \
-	 	    privoxy \
-	 	    && \
-	 	pip install shadowsocks && \
+        apk update && apk add \
+            curl \
+            py-pip \
+            privoxy \
+            && \
+        pip install shadowsocks && \
         cd /etc/privoxy && \
-	 	cp config config.default && \
-	 	grep -v '^\s*$\|^#' config.default > config && \
-	 	sed -i "s#127.0.0.1:8118#:${PROXY_PORT}#g" config && \
+        cp config config.default && \
+        grep -v '^\s*$\|^#' config.default > config && \
+        sed -i "s#127.0.0.1:8118#:${PROXY_PORT}#g" config && \
         echo "forward-socks5 / 127.0.0.1:${LOCAL_PORT} ." >> config && \
         rm -rf /var/cache/apk/* ~/.cache
 
