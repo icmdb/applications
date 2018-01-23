@@ -2,6 +2,8 @@
 
 [TOC]
 
+> This mirror is only for technical study and research, please strictly abide by relevant laws and regulations, is strictly prohibited for commercial thoroughfare, do not browse or disseminate illegal information.
+
 ## Pull image
 ```bash
 docker pull teachmyself/sslocal
