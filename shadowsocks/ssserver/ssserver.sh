@@ -2,10 +2,15 @@
 #
 #
 
-PORT="16100"
-PASSWORD="123654"
-METHOD="aes-256-cfb"
+#set -x
+#set -u
+#set -e
+
+# Default Options
 NAME="ssserver"
+PORT="8888"
+PASSWORD="123456"
+METHOD="aes-256-cfg"
 
 
 msg() {
@@ -13,23 +18,37 @@ msg() {
 }
 
 help() {
-    echo ""
-    echo "Usage: $0 [install|start|stop|remove|restart]"
+    echo "Usage: $0 [-i|-s|-S]"
+    echo "    -h    display this help and exit."
+    echo "    -i    install and start docker."
+    echo "    -s    pull teachmyself/ssserver and start a container."
+    echo "    -p    specified port, should be used with -s option."
+    echo "    -S    stop ssserver container."
+    echo "    -r    remove ssserver container."
+    echo "    -a    show docker status and list all containers on the host."
+    echo "    -x    show detail information."
+    echo "Optional:"
+    echo "    -n name     specified container name, default ssserver."
+    echo "    -p port     specified container port mapped, default is 8888."
+    echo "    -m method   specified encryption method, default aes-256-cfb."
+    echo "    -P password specified containername default is 123456"
     echo "Example:"
-    echo "	$0 install"
-    echo "	$0 start"
-    echo "	$0 stop"
-    echo "	$0 remove"
-    echo "	$0 restart"
+    echo "    $0 -i	          # install docker"
+    echo "    $0 -is	          # install and start docker"
+    echo "    $0 -S	          # stop ssserver container"
+    echo "    $0 -r               # stop and remove ssserver container"
     echo ""
+    echo "    $0 -p 6666 -s"	# start container with port 6666
+    echo "    $0 -n test -p 6666 -P 123654 -m aes-256-cfb -s   # start contianer with options."
+    echo "    $0 -n test -S   # stop container named ssserver"
 }
+
 docker_install() {
-    sudo apt-get -y install docker   
+    sudo yum -y install docker
     service docker start
-    update-rc.d -f docker defaults
+    systemctl enable docker
 }
 docker_start() {
-    docker pull teachmyself/ssserver
     docker run -d  \
         -e SERVER_PORT=${PORT} \
         -e PASSWORD=${PASSWORD} \
@@ -40,22 +59,39 @@ docker_start() {
         teachmyself/ssserver
 }
 docker_stop() {
-    docker stop ${NAME}
+    docker stop ${NAME} -t 0 
 }
-docker_status() {
-    docker ps -a
-}
-docker_rm() {
+docker_remove() {
+    docker_stop
     docker rm ${NAME}
 }
-docker_restart() {
-    docker_stop
-    docker_rm
-    docker_start
+docker_all() {
+    [[ "$(uname -s)" == "Linux" ]] && systemctl status docker
+    docker ps -a
 }
 
-if [[ "${@}" == "" ]]; then
-    help
-else
-    docker_$1
-fi
+process_args() {
+    while getopts :hn:p:P:m:isSrax opt
+    do
+        case "${opt}" in
+            h) help && exit 0 ;;
+            x) set -x ;;
+            n) NAME="${OPTARG}" ;;
+            p) PORT="${OPTARG}" ;;
+            P) PASSWORD="${OPTARG}" ;;
+            m) METHOD="${OPTARG}" ;;
+            i) docker_install ;;
+            s) docker_start && exit $? ;;
+            S) docker_stop && exit $? ;;
+            r) docker_remove && exit $? ;;
+            a) docker_all && exit $? ;;
+            \?) msg "Error: illegal option -- ${OPTARG}" ;;
+            :) msg "Error: Option -${OPTARG} requires on argument." ;;
+            "") help && exit 1 ;;
+        esac
+    done
+
+    shift "$(( ${OPTIND} - 1 ))"
+}
+
+process_args "${@}"
