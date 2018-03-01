@@ -55,11 +55,11 @@ docker_install() {
         [[ "$(lsb_release -si)" == "CentOS" ]] && sudo yum -y install docker
         [[ "$(lsb_release -si)" == "Ubuntu" ]] && sudo apt-get -y install docker
         service docker start
-        sudo systemctl enable docker
+        systemctl enable docker
     fi
 }
 docker_all() {
-    [[ "$(uname -s)" == "Linux" ]] && sudo systemctl status docker
+    [[ "$(uname -s)" == "Linux" ]] && systemctl status docker
     docker ps -a
 }
 docker_start() {
@@ -87,6 +87,11 @@ docker_remove() {
 }
 
 process_args() {
+    if [[ "$(id -u)" -ne 0 ]]; then
+        msg "$(red 'Should be run as root.')"
+        exit 1
+    fi
+
     while getopts :hn:p:P:m:isSrax opt
     do
         case "${opt}" in
