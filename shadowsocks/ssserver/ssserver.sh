@@ -10,9 +10,14 @@
 NAME="ssserver"
 PORT="8888"
 PASSWORD="123456"
-METHOD="aes-256-cfg"
+METHOD="aes-256-cfb"
 
-
+red() {
+    echo -e "\033[31;5m${@}\033[0m"
+}
+green() {
+    echo -e "\033[32;5m${@}\033[0m"
+}
 msg() {
     echo "[$(date '+%F %T%z')] ${@}"
 }
@@ -35,6 +40,7 @@ help() {
     echo "Example:"
     echo "    $0 -i	          # install docker"
     echo "    $0 -is	          # install and start docker"
+    echo "    $0 -s	          # start a container"
     echo "    $0 -S	          # stop ssserver container"
     echo "    $0 -r               # stop and remove ssserver container"
     echo ""
@@ -44,11 +50,21 @@ help() {
 }
 
 docker_install() {
-    sudo yum -y install docker
-    service docker start
-    systemctl enable docker
+    if [[ "$(uname -s)" == "Linux" ]]; then
+        msg "$(green 'Installing docker')"
+        [[ "$(lsb_release -si)" == "CentOS" ]] && sudo yum -y install docker
+        [[ "$(lsb_release -si)" == "Ubuntu" ]] && sudo apt-get -y install docker
+        service docker start
+        systemctl enable docker
+    fi
+}
+docker_all() {
+    [[ "$(uname -s)" == "Linux" ]] && systemctl status docker
+    docker ps -a
 }
 docker_start() {
+    msg "$(green 'Starting container with command blow:')"
+    set -x
     docker run -d  \
         -e SERVER_PORT=${PORT} \
         -e PASSWORD=${PASSWORD} \
@@ -57,17 +73,17 @@ docker_start() {
         --name ${NAME} \
         --restart always \
         teachmyself/ssserver
+    set +x
+    docker_all
 }
 docker_stop() {
+    msg "$(green 'Stopping container')"
     docker stop ${NAME} -t 0 
 }
 docker_remove() {
     docker_stop
+    msg "$(green 'Removing container')" 
     docker rm ${NAME}
-}
-docker_all() {
-    [[ "$(uname -s)" == "Linux" ]] && systemctl status docker
-    docker ps -a
 }
 
 process_args() {
@@ -92,6 +108,8 @@ process_args() {
     done
 
     shift "$(( ${OPTIND} - 1 ))"
+
+    [[ "${@}" == "" ]] && help && exit 1
 }
 
 process_args "${@}"
