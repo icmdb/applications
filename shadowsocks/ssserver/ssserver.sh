@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#
+# @TODO: 自动添加安全组规则
 
 #set -x
 #set -u
@@ -55,11 +55,11 @@ docker_install() {
         [[ "$(lsb_release -si)" == "CentOS" ]] && sudo yum -y install docker
         [[ "$(lsb_release -si)" == "Ubuntu" ]] && sudo apt-get -y install docker
         service docker start
-        systemctl enable docker
+        sudo systemctl enable docker
     fi
 }
 docker_all() {
-    [[ "$(uname -s)" == "Linux" ]] && systemctl status docker
+    [[ "$(uname -s)" == "Linux" ]] && sudo systemctl status docker
     docker ps -a
 }
 docker_start() {
