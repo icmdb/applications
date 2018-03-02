@@ -6,6 +6,9 @@
 #set -u
 #set -e
 
+BASE_NAME="$(dirname $0)"
+cd ${BASE_NAME}
+
 # Default Options
 NAME="ssserver"
 PORT="8888"
@@ -52,17 +55,18 @@ help() {
 docker_install() {
     if [[ "$(uname -s)" == "Linux" ]]; then
         msg "$(green 'Installing docker')"
-        [[ "$(lsb_release -si)" == "CentOS" ]] && sudo yum -y install docker
-        [[ "$(lsb_release -si)" == "Ubuntu" ]] && sudo apt-get -y install docker
-        service docker start
+        [[ "$(lsb_release -si)" == "CentOS" ]] && yum -y install docker
+        [[ "$(lsb_release -si)" == "Ubuntu" ]] && apt-get update && apt-get -y install docker.io
+        systemctl start docker
+        systemctl status docker
         systemctl enable docker
     fi
 }
 docker_all() {
-    [[ "$(uname -s)" == "Linux" ]] && systemctl status docker
     docker ps -a
 }
 docker_start() {
+    which docker || docker_install
     msg "$(green 'Starting container with command blow:')"
     set -x
     docker run -d  \
@@ -87,7 +91,7 @@ docker_remove() {
 }
 
 process_args() {
-    if [[ "$(id -u)" -ne 0 ]]; then
+    if [[ "$(uname -s)" == "Linux" ]] && [[ "$(id -u)" -ne 0 ]]; then
         msg "$(red 'Should be run as root.')"
         exit 1
     fi
