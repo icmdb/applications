@@ -2,7 +2,7 @@
 
 [TOC]
 
-> This mirror is only for technical study and research, please strictly abide by relevant laws and regulations, is strictly prohibited for commercial thoroughfare, do not browse or disseminate illegal information.
+> This image is only for technical study and research, please strictly abide by relevant laws and regulations, is strictly prohibited for commercial thoroughfare, do not browse or disseminate illegal information.
 
 ## Pull image
 ```bash
@@ -12,7 +12,7 @@ docker images | grep sslocal
 
 ## Start container named sslocal
 
-> This step depedends on a ssserver.
+> This step depedends on a ssserver. You should change the value of `SERVER_HOST`, `SERVER_PORT`, `PASSWORD`, `METHOD` in the command before you run it.
 
 ```bash
 docker run -d  \
@@ -20,8 +20,6 @@ docker run -d  \
     -e SERVER_PORT=8888 \
     -e PASSWORD=123456 \
     -e METHOD=aes-256-cfb \
-    -e LOCAL_PORT=1080 \
-    -e PROXY_PORT=8118 \
     -p 8118:8118 \
     --name sslocal \
     --restart always \

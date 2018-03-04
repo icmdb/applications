@@ -38,6 +38,7 @@ services:
       aliyun.rolling_updates: 'true'
       aliyun.scale: '2'
       aliyun.log_store_sslocal: stdout
+      aliyun.log_store_sslocal: /var/log/sslocal.log
     expose:
       - 8118
     restart: always

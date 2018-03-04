@@ -1,6 +1,6 @@
 # ssserver
 
-> This mirror is only for technical study and research, please strictly abide by relevant laws and regulations, is strictly prohibited for commercial thoroughfare, do not browse or disseminate illegal information.
+> This image is only for technical study and research, please strictly abide by relevant laws and regulations, is strictly prohibited for commercial thoroughfare, do not browse or disseminate illegal information.
 
 
 ## Use Docker
@@ -11,8 +11,6 @@ yum -y install docker
 
 # Ubuntu (16.04 is Recommended)
 apt-get -y install docker
-
-systemctl enable docker
 ```
 
 
