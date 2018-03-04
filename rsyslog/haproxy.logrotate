@@ -1,0 +1,14 @@
+/var/log/haproxy/haproxy.log {
+    compress
+    hourly
+    maxsize 1G
+    minsize 50M
+    rotate 7
+    missingok
+    copy
+    notifempty
+    sharedscripts
+    postrotate
+        echo "" > /var/log/haproxy/haproxy.log
+    endscript
+}
