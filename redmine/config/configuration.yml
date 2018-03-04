@@ -1,0 +1,44 @@
+###################################################################
+# @reference:
+#   http://www.redmine.org/projects/redmine/wiki/EmailConfiguration
+#   http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+#   https://help.aliyun.com/document_detail/29449.html
+#   https://help.aliyun.com/document_detail/29455.html
+###################################################################
+
+default:
+  email_delivery:
+    delivery_method: :smtp
+    smtp_settings:
+      enable_starttls_auto: flase
+      openssl_verify_mode: none
+      address: smtpdm.aliyun.com
+      port: 80
+      domain: smtpdm.aliyun.com
+      authentication: :plain
+      user_name: demo@mail.teachmyself.cn
+      password: Passw0rd
+
+production:
+  delivery_method: :smtp
+  smtp_settings:
+    enable_starttls_auto: flase
+    openssl_verify_mode: none
+    address: smtpdm.aliyun.com
+    port: 80
+    domain: smtpdm.aliyun.com
+    authentication: :plain
+    user_name: demo@mail.teachmyself.cn
+    password: Passw0rd
+
+development:
+  delivery_method: :smtp
+  smtp_settings:
+    enable_starttls_auto: flase
+    openssl_verify_mode: none
+    address: smtpdm.aliyun.com
+    port: 80
+    domain: smtpdm.aliyun.com
+    authentication: :plain
+    user_name: demo@mail.teachmyself.cn
+    password: Passw0rd

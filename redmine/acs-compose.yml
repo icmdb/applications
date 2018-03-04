@@ -1,0 +1,27 @@
+version: '2'
+services:
+  redmine:
+    image: teachmyself/redmine
+    environment:
+      - 'reschedule:on-node-failure'
+      - REDMINE_DB_MYSQL=mysql
+      - REDMINE_DB_PORT=3306
+      - REDMINE_DB_USERNAME=redmine
+      - REDMINE_DB_PASSWORD=123456
+      - REDMINE_DB_DATABASE=redmine
+    labels:
+      aliyun.probe.url: 'tcp://container:3000'
+      aliyun.probe.timeout_seconds: 8
+      aliyun.probe.initial_delay_seconds: 8
+      aliyun.rolling_updates: true
+      aliyun.scale: 1
+      aliyun.custom_addon: 'proxy'
+      aliyun.proxy.VIRTUAL_HOST: 'redmine.teachmyself.cn'
+      aliyun.proxy.required: 'true'
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /usr/src/redmine/files
+    expose:
+      - 3000
+  mysql:
+

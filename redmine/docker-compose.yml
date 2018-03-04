@@ -1,0 +1,18 @@
+version: '2'
+services:
+  redmine:
+    mage: teachmyself/redmine
+    environment:
+      - REDMINE_DB_MYSQL=mysql
+      - REDMINE_DB_PORT=3306
+      - REDMINE_DB_USERNAME=redmine
+      - REDMINE_DB_PASSWORD=123456
+      - REDMINE_DB_DATABASE=redmine
+    labels:
+    volumes:
+      - /usr/src/redmine/files
+    expose:
+      - 3000
+  mysql:
+      
+
