@@ -1,0 +1,22 @@
+version: '2'
+services:
+  syntaxnet:
+    image: tensorflow/syntaxnet    
+    environment:
+      - affinity:service!=syntaxnet
+      - reschedule:on-node-failure
+      - PASSWORD=tensorflow
+    labels:
+      aliyun.probe.url: tcp://container:8888
+      aliyun.probe.timeout_seconds: 8
+      aliyun.probe.initial_delay_seconds: 8
+      aliyun.rolling_updates: 'true'
+      aliyun.scale: '1'
+      aliyun.log_store_syntaxnet: stdout
+      aliyun.proxy.VIRTUAL_HOST: 'syntaxnet.live.teachmyself.cn'
+      aliyun.proxy.required: 'true'
+    volumens:
+      - /etc/localtime:/etc/localtime:rw
+    restart: 'always'
+    expose:
+      - '8888'
