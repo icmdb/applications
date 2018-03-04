@@ -11,6 +11,8 @@ yum -y install docker
 
 # Ubuntu (16.04 is Recommended)
 apt-get -y install docker
+
+systemctl enable docker
 ```
 
 
