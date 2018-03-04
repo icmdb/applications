@@ -1,0 +1,8 @@
+#########################################################
+# @reference:
+#   https://goaccess.io/man#custom-log
+#   http://www.tothenew.com/blog/php5-fpm-logging/
+#########################################################
+log-format %h %^ %d:%t %^ "%m %r" %s %q %L %^ %^
+date-format %d/%b/%Y
+time-format %H:%M:%S

@@ -1,0 +1,8 @@
+#########################################################
+# @reference:
+#   https://goaccess.io/man#custom-log  
+#   https://help.aliyun.com/knowledge_detail/40146.html
+#########################################################
+log-format [%d:%t %^] %h %^ %^ %^ "%m %r" %s %^ %^ %^ "%u" $^
+date-format %d/%b/%Y
+time-format %H:%M:%S
