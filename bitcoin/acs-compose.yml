@@ -1,0 +1,24 @@
+version: "2"
+services:
+  bitcoind:
+    image: registry-internal.cn-beijing.aliyuncs.com/antpool/bitcoind:latest
+    environment:
+      - reschedule:on-node-failure
+      - affinity:service!=~bitcoind
+      - APP=bitcoind
+      - CLUSTER=bitcoind
+      - PROVIDER=alicloud
+      - REGION=cn-beijing
+    labels:
+      - aliyun.probe.url: tcp://container:8333
+      - aliyun.probe.timeout_seconds: 6
+      - aliyun.probe.initial_delay_seconds: 6
+      - aliyun.rolling_update: 'true'
+      - aliyun.log_store_bitcoind: stdout 
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/bitcoindata:/opt/bitcoindata
+    ports:
+      - 8333:8333/tcp
+      - 8332:8332/tcp
+    restart: always
