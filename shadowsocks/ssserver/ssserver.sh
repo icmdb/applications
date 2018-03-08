@@ -10,8 +10,8 @@ BASE_NAME="$(dirname $0)"
 cd ${BASE_NAME}
 
 # Default Options
-NAME="ssserver"
 PORT="8888"
+NAME="ssserver-${PORT}"
 PASSWORD="123456"
 METHOD="aes-256-cfb"
 
@@ -102,7 +102,7 @@ process_args() {
             h) help && exit 0 ;;
             x) set -x ;;
             n) NAME="${OPTARG}" ;;
-            p) PORT="${OPTARG}" ;;
+            p) PORT="${OPTARG}" && NAME="ssserver-${PORT}" ;;
             P) PASSWORD="${OPTARG}" ;;
             m) METHOD="${OPTARG}" ;;
             i) docker_install ;;
