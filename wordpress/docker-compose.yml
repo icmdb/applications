@@ -1,0 +1,50 @@
+version: '3'
+services:
+  wordpress:
+    image: wordpress:4.9.8-php7.2-apache
+    environment:
+      reschedule: on-node-failure
+      WORDPRESS_DEBUG:
+      WORDPRESS_DB_HOST: dbhost
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: e7134abea7438e937b87608eab0d979c
+      WORDPRESS_DB_PASSWORD: dERFeDVweUlJRFRtbDZVZzVwCg==
+      WORDPRESS_TABLE_PREFIX: wp_
+      WORDPRESS_SECURE_AUTH_KEY: U3VuIE5vdiAgNCAxMTo1NDoxNyBVVEMgMjAxOAo=
+      WORDPRESS_NONCE_KEY: MTU0MTMzMjQ5OAo=
+      WORDPRESS_AUTH_SALT: 7870fd
+      WORDPRESS_SECURE_AUTH_SALT: 1994a
+      WORDPRESS_LOGGED_IN_SALT: 81ea55
+      WORDPRESS_NONCE_SALT: 0026e1
+      WORDPRESS_NONCE_AA: 81ea55
+    expose:
+      - 80
+    ports:
+      - 8080:80
+    links:
+      - 'mysql:dbhost'
+    volumes:
+      - /data/wordpress/wp-content/uploads:/var/www/html/wp-content/uploads
+      - /data/wordpress/wp-content/themes:/var/www/html/wp-content/themes
+      - /data/wordpress/wp-content/plugins:/var/www/html/wp-content/plugins
+      - /data/wordpress/logs:/var/log/apache2
+    restart: always
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      reschedule: on-node-failure
+      MYSQL_ROOT_PASSWORD: ewds823n4o23asf2e23WEW
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: e7134abea7438e937b87608eab0d979c
+      MYSQL_PASSWORD: dERFeDVweUlJRFRtbDZVZzVwCg==
+#      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#      MYSQL_RANDOM_ROOT_PASSWORD: yes
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    volumes:
+      - /data/mysql/data:/var/lib/mysql
+      - /data/mysql/logs:/var/log/mysql
+    restart: always
